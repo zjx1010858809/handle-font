@@ -72,9 +72,13 @@
         <input type="text" id="text-input">
         <br>
         <button type="button" onclick="addChar()">转换</button>
+		<!-- 增加复制按钮 -->
+		<button type="button" onclick="copyResult()">复制结果</button>
     </form>
 
     <div id="result"></div>
+	
+	
 
     <script>
         var colors = ["#R", "#Y", "#B", "#G", "#P", "#O"];
@@ -88,6 +92,16 @@
                 colorIndex = (colorIndex + 1) % colors.length;
             }
             document.getElementById("result").innerHTML = result;
+        }
+		function copyResult() {
+            var result = document.getElementById("result").innerText;
+            var tempInput = document.createElement("input");
+            document.body.appendChild(tempInput);
+            tempInput.setAttribute("value", result);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+            alert("已复制结果到剪贴板！");
         }
     </script>
 </body>
