@@ -2,53 +2,81 @@
 <html>
 <head>
     <meta charset="UTF-8">
-	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-	<meta http-equiv="Pragma" content="no-cache">
-	<meta http-equiv="Expires" content="0">
-    <title>字体生成器</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>字体生成器</title>
     <style>
         body {
             font-family: 'Helvetica Neue', sans-serif;
             background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
         }
 
-        h1 {
+        .header {
             text-align: center;
+            padding: 20px;
+            background-color: #f05656;
+            color: #fff;
+        }
+
+        .header h1 {
             font-size: 24px;
-            margin-top: 20px;
+            margin: 0;
         }
-		
-		.custom-color {
-			color: blue;
-			font-weight: bolder;
-		}
 
-        form {
-            margin: 0 auto;
-            width: 80%;
+        .main-content {
             text-align: center;
-            margin-top: 20px;
-            margin-bottom: 50px;
+            margin-top: 50px;
         }
 
-        label {
+        .input-label {
             font-size: 14px;
             font-weight: bold;
+            display: block;
+            margin-bottom: 10px;
+            text-align: center;
         }
 
-        input[type="text"] {
+        .input-field {
             font-size: 16px;
             border: none;
             border-bottom: 2px solid #ccc;
             padding: 8px 16px;
             margin-top: 10px;
             margin-bottom: 20px;
-            width: 100%;
+            width: 80%;
             box-sizing: border-box;
+            text-align: center;
+            outline: none;
         }
 
-        button[type="button"] {
+        .color-input-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .color-input-label {
+            font-size: 14px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .color-input {
+            width: 40px;
+            height: 40px;
+            padding: 0;
+            border: none;
+            outline: none;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .button {
             font-size: 16px;
             font-weight: bold;
             background-color: #f05656;
@@ -57,15 +85,19 @@
             border-radius: 5px;
             padding: 10px 20px;
             cursor: pointer;
-            margin-bottom: 50px;
             transition: background-color 0.3s ease;
+            margin-right: 10px;
         }
 
-        button[type="button"]:hover {
+        .button-container:last-child {
+            margin-bottom: 50px;
+        }
+
+        .button:hover {
             background-color: #d9534f;
         }
 
-        #result {
+        .result {
             font-size: 18px;
             text-align: center;
             margin-top: 30px;
@@ -73,43 +105,100 @@
     </style>
 </head>
 <body>
-    <h1><p class="custom-color">万舰归辰</p>专属字体生成器</h1>
-    <form>
-        <label for="text-input">请输入文本：</label>
-        <br>
-        <input type="text" id="text-input">
-        <br>
-        <button type="button" onclick="addChar()">转换</button>
-		<!-- 增加复制按钮 -->
-		<button type="button" onclick="copyResult()">一键复制</button>
-    </form>
+    <div class="header">
+        <h1>万剑归辰</h1>
+        <h1>专属字体生成器</h1>
+    </div>
 
-    <div id="result"></div>
-	
-	
+    <div class="main-content">
+        <div>
+            <label class="input-label" for="text-input">请输入文本：</label>
+            <input class="input-field" type="text" id="text-input" placeholder="在此输入文本">
+        </div>
+
+        <div class="button-container">
+            <button class="button" type="button" onclick="addRandomChars()">转换</button>
+            <button class="button" type="button" onclick="copyResult()">一键复制</button>
+        </div>
+
+        <div class="result" id="result"></div>
+    </div>
+
+    <div class="main-content">
+        <div class="color-input-container">
+            <label class="color-input-label" for="color-input">选择颜色：</label>
+            <input class="color-input" type="color" id="color-input">
+        </div>
+
+        <div class="color-input-container">
+            <input class="input-field" type="text" id="text-input-2" placeholder="在此输入文本">
+        </div>
+
+        <div class="button-container">
+            <button class="button" type="button" onclick="addColorPrefix()">转换</button>
+            <button class="button" type="button" onclick="copyColorResult()">一键复制</button>
+        </div>
+
+        <div class="result" id="color-result"></div>
+    </div>
 
     <script>
-        var colors = ["#R", "#G", "#Y", "#W", "#c32CD32", "#cCD7F32", "#c70DB93", "#c8F8FBD", "#P", "#O"];
+        // 第一个功能：将指定字符集中的元素随机插入到录入的字符串中每个字符前边
+        function addRandomChars() {
+            var textInput = document.getElementById('text-input');
+            var resultDiv = document.getElementById('result');
+            var text = textInput.value;
+            var chars = ["#R", "#Y", "#B", "#G", "#P", "#O"];
+            var result = '';
 
-        function addChar() {
-            var textInput = document.getElementById("text-input").value;
-            var result = "";
-            var colorIndex = 0;
-            for (var i = 0; i < textInput.length; i++) {
-                result += colors[colorIndex] + textInput[i];
-                colorIndex = (colorIndex + 1) % colors.length;
+            for (var i = 0; i < text.length; i++) {
+                result += chars[Math.floor(Math.random() * chars.length)] + text[i];
             }
-            document.getElementById("result").innerHTML = result;
+
+            resultDiv.innerHTML = result;
         }
-		function copyResult() {
-            var result = document.getElementById("result").innerText;
-            var tempInput = document.createElement("input");
+
+        // 第二个功能：将选择的颜色对应的颜色代码添加到录入的字符串前边
+        function addColorPrefix() {
+            var textInput = document.getElementById('text-input-2');
+            var colorInput = document.getElementById('color-input');
+            var resultDiv = document.getElementById('color-result');
+            var text = textInput.value;
+            var color = colorInput.value;
+            var colorCode = color.toUpperCase();
+            var result = '#' + 'c' + colorCode.substr(1, 6) + text;
+
+            resultDiv.innerHTML = result;
+        }
+
+        // 复制结果到剪贴板（第一个功能）
+        function copyResult() {
+            var resultDiv = document.getElementById('result');
+            var result = resultDiv.innerHTML;
+
+            var tempInput = document.createElement('input');
+            tempInput.setAttribute('value', result);
             document.body.appendChild(tempInput);
-            tempInput.setAttribute("value", result);
             tempInput.select();
-            document.execCommand("copy");
+            document.execCommand('copy');
             document.body.removeChild(tempInput);
-            alert("已复制结果到剪贴板！");
+
+            alert('已复制到剪贴板');
+        }
+
+        // 复制结果到剪贴板（第二个功能）
+        function copyColorResult() {
+            var resultDiv = document.getElementById('color-result');
+            var result = resultDiv.innerHTML;
+
+            var tempInput = document.createElement('input');
+            tempInput.setAttribute('value', result);
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+
+            alert('已复制到剪贴板');
         }
     </script>
 </body>
